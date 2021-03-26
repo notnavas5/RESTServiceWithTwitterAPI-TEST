@@ -30,7 +30,7 @@ public class RestTwitterServices {
 	public @ResponseBody ModelDataTweetListByTopic getTweets(@RequestParam(name = "topic") String topic , @RequestParam(name = "ntweets") int nTweets){
 		ModelDataTweetListByTopic response = new ModelDataTweetListByTopic();
 		List<CustomTweetEntity> tweetList =twControl.getTweets(topic, nTweets);
-		storeTweets(tweetList) ;
+		storeTweets(twControl.getTweets(topic, nTweets)) ;
 		response.setTweetListByTopic(tweetList);
 		return response;
 	}
@@ -72,8 +72,6 @@ public class RestTwitterServices {
 
 	private void storeTweets(List<CustomTweetEntity> tweetList) {
 		// TODO Auto-generated method stub
-		for(CustomTweetEntity tweet : tweetList){
-			service.saveCustomTweetEntity(tweet);
-		}
+		service.saveCustomTweetEntitys(tweetList);
 	}
 }

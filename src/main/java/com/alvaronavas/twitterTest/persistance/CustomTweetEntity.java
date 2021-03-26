@@ -1,8 +1,6 @@
 package com.alvaronavas.twitterTest.persistance;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -10,9 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import twitter4j.GeoLocation;
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Entity
 @Table(name="tweet_table")
 public class CustomTweetEntity {
