@@ -2,9 +2,18 @@ package com.alvaronavas.twitterTest.restservices;
 
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,13 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alvaronavas.twitterTest.customtwitterclasses.CustomTwitterController;
 import com.alvaronavas.twitterTest.modeldata.ModelDataTopHashtags;
 import com.alvaronavas.twitterTest.modeldata.ModelDataTweetListByTopic;
-import com.alvaronavas.twitterTest.modeldata.ModelDataValidateTwit;
 import com.alvaronavas.twitterTest.modeldata.ModelDataValidatedTweetList;
 import com.alvaronavas.twitterTest.persistance.CustomTweetEntity;
 import com.alvaronavas.twitterTest.persistance.CustomTweetService;
 
+
 @RestController
 @RequestMapping("/rest/twitterapp")
+@Validated
 public class RestTwitterServices {
 	
 	CustomTwitterController twControl = new CustomTwitterController(); //esto lo hare interfaz
@@ -27,7 +37,7 @@ public class RestTwitterServices {
 	private CustomTweetService service;
 	
 	@GetMapping(path ="/getTweets", produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ModelDataTweetListByTopic getTweets(@RequestParam(name = "topic") String topic , @RequestParam(name = "ntweets") int nTweets){
+	public @ResponseBody ModelDataTweetListByTopic getTweets(@NotNull @RequestParam(name = "topic") String topic , @Min(1) @Max(1500) @RequestParam(name = "ntweets") int nTweets){
 		ModelDataTweetListByTopic response = new ModelDataTweetListByTopic();
 		List<CustomTweetEntity> tweetList =twControl.getTweets(topic, nTweets);
 		storeTweets(twControl.getTweets(topic, nTweets)) ;
@@ -48,15 +58,12 @@ public class RestTwitterServices {
 		response.setvalidatedTweetList(getValdiatedTweets());
 		return response;
 	}
-	@GetMapping(path ="/validateTweet", produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ModelDataValidateTwit setValidateTweet(@RequestParam(name = "id") long id ){
-		ModelDataValidateTwit response = new ModelDataValidateTwit();
+	@PutMapping(path ="/validateTweet", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> setValidateTweet(@Valid @RequestParam(name = "id") long id ){
+		ResponseEntity<String> response = new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		
-		response.setTweet(validateTweet(id));
-		if(response.getTweet() != null){
-			response.setStatus(201);
-		}else{
-			response.setStatus(400);
+		if(validateTweet(id) != null){
+			response =new ResponseEntity<String>(HttpStatus.OK);
 		}
 		
 		return response;

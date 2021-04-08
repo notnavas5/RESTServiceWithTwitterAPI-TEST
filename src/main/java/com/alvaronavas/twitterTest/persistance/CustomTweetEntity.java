@@ -8,18 +8,23 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import twitter4j.GeoLocation;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Entity
 @Table(name="tweet_table")
 public class CustomTweetEntity {
-
+	
+	@NotNull
 	@Id
 	@Column(name="id")
 	private long tweetId;
 	
+	@NotNull
 	@Column(name="user")
 	private String user;
 	
+	@NotNull
 	@Column(name="text",length=1000)
 	private String text;
 	

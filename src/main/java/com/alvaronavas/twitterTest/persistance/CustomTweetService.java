@@ -36,8 +36,9 @@ public class CustomTweetService {
     	CustomTweetEntity existingCustomTweetEntity = repository.findBytweetId(id);
     	if(existingCustomTweetEntity != null){
     		existingCustomTweetEntity.setValidated(true);
+    		repository.save(existingCustomTweetEntity);
     	}
-        return repository.save(existingCustomTweetEntity);
+        return existingCustomTweetEntity;
     }
 
 

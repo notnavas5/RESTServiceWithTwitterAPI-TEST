@@ -18,7 +18,6 @@ public class CustomTwitterController  {
 
 	private static final List <String> LANGUAGES_LIST = Arrays.asList("en", "fr", "es", "it");
 	private static final int MIN_TWEETS_COUNT = 1500;
-	private static final int MAX_TWEETS = 3000;
 	private static final int LOCATION_ID = 23424950;//SPAIN
 
 	Twitter twitter = null;
@@ -33,9 +32,7 @@ public class CustomTwitterController  {
 		int tweetsSaved = 0;
 		int i=0;
 		List<CustomTweetEntity> customTweetsList = new  ArrayList<CustomTweetEntity>();
-		if (nTweets > MAX_TWEETS || nTweets <= 15 ){// We must use validators for the rest service, but im doing this for fast testing
-			nTweets = MAX_TWEETS;
-		}
+		
 		int pageIterations = nTweets / 15; // There are 15 tweets per query iteration.
 
 		try {
